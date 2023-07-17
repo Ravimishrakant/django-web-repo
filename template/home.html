@@ -1,0 +1,155 @@
+{% load custom_filters %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text to Speech</title>
+    <style>
+        /* Add your custom CSS styles here */
+        /* ... */
+
+        .logout-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .logout-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .logout-btn:active {
+            background-color: #3c9039;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+
+    <style>
+        /* Add your custom CSS styles here */
+        body {
+            
+            background-image: url('{% static "D:\text to speech\speechweb\static\simon-berger-twukN12EN7c-unsplash.jpg" %}');
+            /* Add other background properties if needed */
+            background-size: cover; /* Adjusts the image size to cover the entire container */
+            background-position: center; /* Centers the image within the container */
+            /* Add other background properties if needed */
+        }
+        
+        /* Adjust the layout of the form elements */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 50px;
+            text-align: center;
+        }
+        
+        textarea {
+            width: 500px;
+            height: 150px;
+            resize: none;
+            margin-bottom: 10px;
+        }
+        
+        label {
+            margin-bottom: 5px;
+        }
+        
+        select {
+            margin-bottom: 10px;
+        }
+        
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        /* Adjust the layout of the audio and download elements */
+        .audio-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        audio {
+            margin-bottom: 10px;
+        }
+        
+        .download-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .instruction {
+            margin-bottom: 10px;
+            font-size: 16px;
+            text-align: center;
+            animation: slideIn 2s infinite;
+            animation-timing-function: ease-in-out;
+            animation-direction: alternate;
+            animation-delay: 0.2s;
+            animation-fill-mode: both;
+        }
+        
+        @keyframes slideIn {
+            0% {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        /* Add more custom styles as desired */
+    </style>
+<form method="POST">
+    {% csrf_token %}
+    <label for="home" class="instruction"><h4>Enter text to convert to voice:</h4></label>
+    <textarea name="home" id="home" rows="5" cols="40"></textarea>
+    <br>
+    
+    </select>
+    <br>
+    <label for="voice">Voice:</label>
+    <select name="voice" id="voice">
+        <option value="english">English</option>
+        <option value="hindi">Hindi</option>
+        <!-- Add more voice options if needed -->
+    </select>
+    <br>
+    <input type="submit" value="Submit">
+</form>
+
+{% if audio_data %}
+<div class="audio-container">
+    <audio controls>
+        <source src="data:audio/mpeg;base64,{{ audio_data|base64_encode }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <br>
+    <a href="data:audio/mpeg;base64,{{ audio_data|base64_encode }}" class="download-link" download="output.mp3">Download</a>
+</div>
+{% endif %}
+</body>
+</html>
